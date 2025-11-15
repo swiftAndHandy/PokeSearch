@@ -8,11 +8,30 @@
 import SwiftUI
 
 struct PokemonDetailView: View {
+    let pokemon: Pokemon
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            HStack(alignment: .center) {
+                Text("\(pokemon.name.capitalized)")
+                Spacer()
+                Text("# \(pokemon.id)")
+            }
+            .padding()
+            .background(Color.green.opacity(0.2))
+            .clipShape(.capsule)
+            .font(.title)
+            Spacer()
+            Text("Image goes here")
+            Spacer()
+            Text("Info-Box")
+                .frame(width: .infinity, height: 200)
+        }
+        .frame(width: 300, height: 500)
+        .background(.ultraThinMaterial)
     }
 }
 
 #Preview {
-    PokemonDetailView()
+    PokemonDetailView(pokemon: Pokemon(abilities: [], baseExperience: 10, height: 10, id: 1, name: "blubasaur"))
 }

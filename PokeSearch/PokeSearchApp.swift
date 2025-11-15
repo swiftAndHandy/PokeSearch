@@ -5,6 +5,7 @@
 //  Created by Andre Veltens on 15.11.25.
 //
 
+import SwiftData
 import SwiftUI
 
 @main
@@ -13,5 +14,6 @@ struct PokeSearchApp: App {
         WindowGroup {
             ContentView()
         }
+//        .modelContainer(for: Pokemon.self)
     }
 }

@@ -8,25 +8,35 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var pokeData: Pokemon?
+    @State var pokeData: [Pokemon] = [Pokemon]()
+    @State var selectedPokemon: Pokemon?
     
     var body: some View {
-        VStack {
-            if let pokemon = pokeData {
-                Text(String(pokemon.baseExperience))
+        NavigationStack {
+            VStack {
+                if pokeData.count > 0 {
+                    Button("Show Details") {
+                        selectedPokemon = pokeData[0]
+                        print(selectedPokemon?.name ?? "No Pokemon")
+                    }
+                }
+            }
+            .padding()
+            .task {
+                do {
+                    let result = try await PokeAPI.fetchPokemon(id: 1)
+                    pokeData.append(result)
+                } catch {
+                    
+                }
             }
         }
-        .padding()
-        .task {
-            do {
-                pokeData = try await PokeAPI.fetchPokemon(id: 1)
-            } catch {
-                
-            }
+        .sheet(item: $selectedPokemon) { pokemon in
+            PokemonDetailView(pokemon: pokemon)
         }
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(pokeData: [])
 }

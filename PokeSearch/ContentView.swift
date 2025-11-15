@@ -8,14 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var pokeData: Pokemon?
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            if let pokemon = pokeData {
+                Text(String(pokemon.baseExperience))
+            }
         }
         .padding()
+        .task {
+            do {
+                pokeData = try await PokeAPI.fetchPokemon(id: 1)
+            } catch {
+                
+            }
+        }
     }
 }
 

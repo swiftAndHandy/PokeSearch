@@ -21,11 +21,21 @@ struct PokemonDetailView: View {
             .background(Color.green.opacity(0.2))
             .clipShape(.capsule)
             .font(.title)
-            Spacer()
-            Text("Image goes here")
+            AsyncImage(url: URL(string: pokemon.sprites.frontDefault)) { phase in
+                    if let image = phase.image {
+                    image
+                        .resizable()
+                        .frame(width: 150, height: 150)
+                        .scaledToFit()
+                } else if phase.error != nil {
+                    Text("Error while loading image.")
+                } else {
+                    LoadingSpinner()
+                }
+            }
             Spacer()
             Text("Info-Box")
-                .frame(width: .infinity, height: 200)
+//                .frame(width: .infinity, height: 200)
         }
         .frame(width: 300, height: 500)
         .background(.ultraThinMaterial)
@@ -33,5 +43,5 @@ struct PokemonDetailView: View {
 }
 
 #Preview {
-    PokemonDetailView(pokemon: Pokemon(abilities: [], baseExperience: 10, height: 10, id: 1, name: "blubasaur"))
+    PokemonDetailView(pokemon: Pokemon.example)
 }

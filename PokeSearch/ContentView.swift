@@ -13,30 +13,35 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                if pokeData.count > 0 {
-                    Button("Show Details") {
-                        selectedPokemon = pokeData[0]
-                        print(selectedPokemon?.name ?? "No Pokemon")
+            ScrollView {
+                VStack {
+                    ForEach(pokeData, id: \.self) { pokemon in
+                        Button("Show Details for \(pokemon.name.capitalized)") {
+                            selectedPokemon = pokeData[pokemon.id - 1]
+                        }
+                    }
+                    Text("loading done")
+                }
+                .padding()
+                .task {
+                    do {
+                        var result = try await PokeAPI.fetchPokemon(id: 1)
+                        pokeData.append(result)
+                        result = try await PokeAPI.fetchPokemon(id: 2)
+                        pokeData.append(result)
+                    } catch {
+                        print(error.localizedDescription)
                     }
                 }
             }
-            .padding()
-            .task {
-                do {
-                    let result = try await PokeAPI.fetchPokemon(id: 1)
-                    pokeData.append(result)
-                } catch {
-                    
-                }
+            .sheet(item: $selectedPokemon) { pokemon in
+                PokemonDetailView(pokemon: pokemon)
             }
-        }
-        .sheet(item: $selectedPokemon) { pokemon in
-            PokemonDetailView(pokemon: pokemon)
+            .scrollBounceBehavior(.basedOnSize)
         }
     }
 }
 
 #Preview {
-    ContentView(pokeData: [])
+    ContentView()
 }

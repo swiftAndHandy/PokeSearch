@@ -17,7 +17,7 @@ class Pokemon: Codable {
     var height: Int
     var id: Int
     var name: String
-//    var sprites: [Sprite]
+    var sprites: Sprite
 //    var stats: [Stat]
     
     enum CodingKeys: CodingKey {
@@ -25,12 +25,13 @@ class Pokemon: Codable {
         
     }
     
-    init(abilities: [Ability], baseExperience: Int, height: Int, id: Int, name: String) {
+    init(abilities: [Ability], baseExperience: Int, height: Int, id: Int, name: String, sprites: Sprite) {
         self.abilities = abilities
         self.baseExperience = baseExperience
         self.height = height
         self.id = id
         self.name = name
+        self.sprites = sprites
     }
     
     required init(from decoder: any Decoder) throws {
@@ -40,6 +41,7 @@ class Pokemon: Codable {
         height = try container.decode(Int.self, forKey: .height)
         id = try container.decode(Int.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
+        sprites = try container.decode(Sprite.self, forKey: .sprites)
     }
     
     func encode(to encoder: any Encoder) throws {
@@ -49,7 +51,8 @@ class Pokemon: Codable {
         try container.encode(height, forKey: .height)
         try container.encode(id, forKey: .id)
         try container.encode(name, forKey: .name)
+        try container.encode(sprites, forKey: .sprites)
     }
     
-    static let example = Pokemon(abilities: [], baseExperience: 0, height: 0, id: 0, name: "")
+    static let example = Pokemon(abilities: [], baseExperience: 12, height: 10, id: 1, name: "bulbasaur", sprites: Sprite.example)
 }

@@ -9,7 +9,7 @@ import Foundation
 
 struct PokeAPI {
     static func fetchPokemon(id: Int) async throws -> Pokemon {
-        let url = URL(string: "https://pokeapi.co/api/v2/pokemon/1/")!
+        let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(id)/")!
         let (data, _) = try await URLSession.shared.data(from: url)
         
         let decoder = JSONDecoder()

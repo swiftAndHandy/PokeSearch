@@ -1,5 +1,5 @@
 //
-//  Types.swift
+//  Element.swift
 //  PokeSearch
 //
 //  Created by Andre Veltens on 17.11.25.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Types: Codable {
+class Element: Codable {
     var slot: Int
     var name: String
     var url: String
@@ -31,10 +31,20 @@ class Types: Codable {
     required init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: OuterKeys.self)
         let typeContainer = try container.nestedContainer(keyedBy: InnerKeys.self, forKey: .type)
-        
+        slot = try container.decode(Int.self, forKey: .slot)
+        name = try typeContainer.decode(String.self, forKey: .name)
+        url = try typeContainer.decode(String.self, forKey: .url)
     }
     
     func encode(to encoder: any Encoder) throws {
-        <#code#>
+        var container = encoder.container(keyedBy: OuterKeys.self)
+        var typeContainer = container.nestedContainer(keyedBy: InnerKeys.self, forKey: .type)
+        try container.encode(slot, forKey: .slot)
+        try typeContainer.encode(name, forKey: .name)
+        try typeContainer.encode(url, forKey: .url)
+    }
+    
+    enum ElementList {
+        case bug, grass, poison, fire, fighting, water, flying, psychic, steel, dragon, fairy, ghost, ground, ice
     }
 }

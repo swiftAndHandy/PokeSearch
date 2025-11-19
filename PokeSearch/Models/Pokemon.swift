@@ -61,5 +61,23 @@ class Pokemon: Codable {
         try container.encode(elementTypes, forKey: .types)
     }
     
-    static let example = Pokemon(abilities: [], baseExperience: 12, height: 10, id: 1, name: "bulbasaur", sprites: Sprite.example, stats: [], elementTypes: [Element(slot: 1, name: "grass", url: "https://pokeapi.co/api/v2/type/12/")])
+    static let example = Pokemon(
+        abilities: [],
+        baseExperience: 12,
+        height: 10,
+        id: 1,
+        name: "bulbasaur",
+        sprites: Sprite.example,
+        stats: [
+            Stat(baseStat: 45, effort: 1, name: "hp"),
+            Stat(baseStat: 49, effort: 1, name: "attack"),
+            Stat(baseStat: 49, effort: 1, name: "defense"),
+            Stat(baseStat: 65, effort: 1, name: "special-attack"),
+            Stat(baseStat: 65, effort: 1, name: "special-defense"),
+            Stat(baseStat: 45, effort: 1, name: "speed")
+        ],
+        elementTypes: [
+            Element(slot: 1, name: "grass", url: "https://pokeapi.co/api/v2/type/12/"), Element(slot: 2, name: "poison", url: "")
+        ]
+    )
 }

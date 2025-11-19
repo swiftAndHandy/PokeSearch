@@ -36,7 +36,7 @@ struct PokemonDetailView: View {
                 }
                 VStack(alignment: .center) {
                     ForEach(pokemon.elementTypes) { element in
-                        Text("\(element.name)")
+                        ElementView(for: element.name)
                     }
                 }
             }

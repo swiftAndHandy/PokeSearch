@@ -44,21 +44,22 @@ class Element: Codable {
         try typeContainer.encode(url, forKey: .url)
     }
     
-    enum ElementList: String {
+    enum ElementList: String, CaseIterable {
         case bug = "bug",
-             grass = "grass",
-             poison = "poison",
-             fire = "fire",
-             fighting = "fighting",
-             water = "water",
-             flying = "flying",
-             psychic = "psychic",
-             steel = "steel",
              dragon = "dragon",
              fairy = "fairy",
+             fighting = "fighting",
+             fire = "fire",
+             flying = "flying",
              ghost = "ghost",
+             grass = "grass",
              ground = "ground",
              ice = "ice",
+             normal = "normal",
+             poison = "poison",
+             psychic = "psychic",
+             steel = "steel",
+             water = "water",
              unknown = "unknown"
     }
 }

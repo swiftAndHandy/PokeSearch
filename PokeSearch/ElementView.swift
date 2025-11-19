@@ -12,13 +12,17 @@ struct ElementModifier: ViewModifier {
     let style: ElementStyle
     
     struct ElementStyle {
-        let foreground: Color
-        let background: Color
+        let foreground: Color?
+        let background: Color?
     }
     
     func body(content: Content) -> some View {
         content
-            .foregroundStyle(style.foreground)
+            .padding(.vertical, 6)
+            .padding(.horizontal, 12)
+            .foregroundStyle(style.foreground ?? .primary)
+            .background(style.background)
+            .clipShape(.capsule)
     }
     
     init(for element: Element.ElementList) {
@@ -28,10 +32,38 @@ struct ElementModifier: ViewModifier {
     
     static func getStyle(for element: Element.ElementList) -> ElementStyle {
         switch element {
+        case .bug:
+            return ElementStyle(foreground: .black, background: .green.opacity(0.7))
+        case .dragon:
+            return ElementStyle(foreground: .black, background: .teal)
+        case .fairy:
+            return ElementStyle(foreground: .white.opacity(1), background: .pink.opacity(0.75))
+        case .fighting:
+            return ElementStyle(foreground: .white, background: .brown)
         case .fire:
-            return ElementStyle(foreground: .red, background: .yellow)
+            return ElementStyle(foreground: .black, background: .orange)
+        case .flying:
+            return ElementStyle(foreground: .black, background: .cyan)
+        case .ghost:
+            return ElementStyle(foreground: .black, background: .gray.opacity(0.5))
+        case .grass:
+            return ElementStyle(foreground: .black, background: .green.opacity(0.9))
+        case .ground:
+            return ElementStyle(foreground: .black.opacity(0.9), background: .brown.opacity(0.8))
+        case .ice:
+            return ElementStyle(foreground: .black, background: .blue.opacity(0.4))
+        case .normal:
+            return ElementStyle(foreground: .black, background: .black.opacity(0.2))
+        case .poison:
+            return ElementStyle(foreground: .white, background: .purple.opacity(0.7))
+        case .psychic:
+            return ElementStyle(foreground: .white, background: .indigo.opacity(0.9))
+        case .steel:
+            return ElementStyle(foreground: .white, background: .gray.opacity(0.9))
+        case .water:
+            return ElementStyle(foreground: .black, background: .blue.opacity(0.5))
         default:
-            return ElementStyle(foreground: .black, background: .white)
+            return ElementStyle(foreground: .primary, background: .clear)
         }
     }
 }
@@ -47,7 +79,7 @@ struct ElementView: View {
     @State private var text: String = ""
     
     var body: some View {
-        Text("\(text)")
+        Text("\(text.capitalized)")
             .elementModifier(for: element)
     }
     
@@ -58,5 +90,7 @@ struct ElementView: View {
 }
 
 #Preview {
-    ElementView(for: "fire")
+    ForEach(Element.ElementList.allCases, id: \.self) { element in 
+        ElementView(for: element.rawValue)
+    }
 }

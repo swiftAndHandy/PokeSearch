@@ -52,6 +52,7 @@ struct ContentView: View {
             }
             .sheet(item: $selectedPokemon) { pokemon in
                 PokemonDetailView(pokemon: pokemon)
+                    
             }
             .scrollBounceBehavior(.basedOnSize)
             .toolbar {

@@ -21,8 +21,10 @@ struct PokemonDetailView: View {
             .background(Color.green.opacity(0.2))
             .clipShape(.capsule)
             .font(.title)
+          
             VStack {
                 AsyncImage(url: URL(string: pokemon.sprites.frontDefault ?? "https://invalid-url")) { phase in
+                    
                     if let image = phase.image {
                         image
                             .resizable()
@@ -33,18 +35,19 @@ struct PokemonDetailView: View {
                     } else {
                         LoadingSpinner()
                     }
+                    
                 }
-                VStack(alignment: .center) {
-                    ForEach(pokemon.elementTypes) { element in
-                        ElementView(for: element.name)
-                    }
-                }
+                
+                ElementView(elements: pokemon.elementTypes)
             }
+            
             Spacer()
+            
             ForEach(pokemon.stats, id: \.self) { stat in
                 Text("\(stat.name): \(stat.baseStat)")
             }
         }
+
     }
 }
 

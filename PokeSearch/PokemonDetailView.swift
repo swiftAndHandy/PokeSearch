@@ -30,22 +30,26 @@ struct PokemonDetailView: View {
             .font(.title)
           
             VStack {
-                AsyncImage(url: URL(string: pokemon.sprites.frontDefault ?? "https://invalid-url")) { phase in
-                    
-                    if let image = phase.image {
-                        image
-                            .resizable()
-                            .frame(width: 250, height: 250)
-                            .scaledToFit()
-                    } else if phase.error != nil {
-                        Text("Error while loading image.")
-                    } else {
-                        LoadingSpinner()
-                            .frame(width: 250, height: 250)
+                HStack {
+                    AsyncImage(url: URL(string: pokemon.sprites.frontDefault ?? "https://invalid-url")) { phase in
+                        
+                        if let image = phase.image {
+                            image
+                                .resizable()
+                                .frame(width: 250, height: 250)
+                                .scaledToFit()
+                        } else if phase.error != nil {
+                            Text("Error while loading image.")
+                        } else {
+                            LoadingSpinner()
+                                .frame(width: 250, height: 250)
+                        }
                     }
+                    ElementView(for: pokemon.elementTypes)
+                    
                 }
-                
-                ElementView(for: pokemon.elementTypes)
+                .frame(maxWidth: .infinity)
+                .background(.gray.opacity(0.2))
             }
             
             Spacer()

@@ -18,11 +18,11 @@ struct ElementView: View {
         }
     }
     
-    init(elements: [Element]) {
+    init(for elements: [Element]) {
         self.elements = elements
     }
 }
 
 #Preview {
-    ElementView(elements: [Element(slot: 1, name: "fire", url: "http://error")])
+    ElementView(for: [Element(slot: 1, name: "fire", url: "http://error")])
 }

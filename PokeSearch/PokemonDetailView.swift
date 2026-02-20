@@ -14,6 +14,13 @@ struct PokemonDetailView: View {
         VStack {
             HStack(alignment: .center) {
                 Text("\(pokemon.name.capitalized)")
+                Button {
+                    Pokemon.playCry(for: pokemon)
+                } label: {
+                    Image(systemName: "speaker.wave.2")
+                        .tint(.gray)
+                }
+                .accessibilityLabel("Play Cry")
                 Spacer()
                 Text("# \(pokemon.id)")
             }
@@ -34,11 +41,11 @@ struct PokemonDetailView: View {
                         Text("Error while loading image.")
                     } else {
                         LoadingSpinner()
+                            .frame(width: 250, height: 250)
                     }
-                    
                 }
                 
-                ElementView(elements: pokemon.elementTypes)
+                ElementView(for: pokemon.elementTypes)
             }
             
             Spacer()

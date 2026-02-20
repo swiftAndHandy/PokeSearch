@@ -13,7 +13,7 @@ import SwiftData
 class Pokemon: Codable {
     var abilities: [Ability]
     var baseExperience: Int
-//    var cries: [Cry]
+    var cries: Cries
     var height: Int
     var id: Int
     var name: String
@@ -26,9 +26,10 @@ class Pokemon: Codable {
         
     }
     
-    init(abilities: [Ability], baseExperience: Int, height: Int, id: Int, name: String, sprites: Sprite, stats: [Stat], elementTypes: [Element]) {
+    init(abilities: [Ability], baseExperience: Int, cries: Cries, height: Int, id: Int, name: String, sprites: Sprite, stats: [Stat], elementTypes: [Element]) {
         self.abilities = abilities
         self.baseExperience = baseExperience
+        self.cries = cries
         self.height = height
         self.id = id
         self.name = name
@@ -41,6 +42,7 @@ class Pokemon: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         abilities = try container.decode([Ability].self, forKey: .abilities)
         baseExperience = try container.decode(Int.self, forKey: .base_experience)
+        cries = try container.decodeIfPresent(Cries.self, forKey: .cries)!
         height = try container.decode(Int.self, forKey: .height)
         id = try container.decode(Int.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
@@ -64,6 +66,7 @@ class Pokemon: Codable {
     static let example = Pokemon(
         abilities: [],
         baseExperience: 12,
+        cries: Cries.example,
         height: 10,
         id: 1,
         name: "bulbasaur",
@@ -80,4 +83,9 @@ class Pokemon: Codable {
             Element(slot: 1, name: "grass", url: "https://pokeapi.co/api/v2/type/12/"), Element(slot: 2, name: "poison", url: "")
         ]
     )
+    
+    static func playCry(for pokemon: Pokemon) {
+        let url = pokemon.cries.latest
+        print(url ?? "No cry available")
+    }
 }

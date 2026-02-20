@@ -14,6 +14,6 @@ struct PokeSearchApp: App {
         WindowGroup {
             ContentView()
         }
-//        .modelContainer(for: Pokemon.self)
+        .modelContainer(for: Pokemon.self)
     }
 }

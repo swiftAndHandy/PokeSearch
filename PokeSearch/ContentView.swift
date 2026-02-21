@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var pokemonList: [PokemonListEntry] = []
     @State private var selectedPokemon: Pokemon?
     @State private var searchFor: String = ""
+    @State private var storage = PokemonStorage()
     
     var filteredPokemonEntries: [PokemonListEntry] {
         if searchFor.isEmpty {
@@ -26,7 +27,7 @@ struct ContentView: View {
     }
     
     var storedPokemon: [Int: Pokemon] {
-        Dictionary(uniqueKeysWithValues: pokeData.map { ($0.id, $0) })
+        Dictionary(pokeData.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
     }
     
     var body: some View {
@@ -53,29 +54,15 @@ struct ContentView: View {
             }
             .task {
                 if pokemonList.isEmpty {
-                    pokemonList = (try? await PokeAPI.fetchList())?.results ?? []
+                    let list = try? await PokeAPI.fetchList()
+                    pokemonList = list?.results.filter {
+                        ($0.id ?? 0) < PokeAPI.officialPokedexLimit
+                    } ?? []
                 }
             }
         }
+        .environment(storage)
     }
-    
-//    private func fetchMissing() async {
-//        do {
-//            let storedIds = Set(pokeData.map { $0.id })
-//            let list = try await PokeAPI.fetchList()
-//            let missingIDs = list.results.compactMap { $0.id }.filter {
-//                !storedIds.contains($0)
-//            }
-//            
-//            for id in missingIDs {
-//                let pokemon = try await PokeAPI.fetchPokemon(id: id)
-//                modelContext.insert(pokemon)
-//                print("downloaded \(pokemon.name)")
-//            }
-//        } catch {
-//            print(error.localizedDescription)
-//        }
-//    }
 }
 
 #Preview {

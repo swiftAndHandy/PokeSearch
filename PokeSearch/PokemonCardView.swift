@@ -14,6 +14,7 @@ struct PokemonCardView: View {
     var onSelect: (Pokemon) -> Void
     
     @Environment(\.modelContext) private var modelContext
+    @Environment(PokemonStorage.self) private var storage
     @State private var pokemon: Pokemon?
     
     var body: some View {
@@ -50,17 +51,8 @@ struct PokemonCardView: View {
             }
         }
         .task {
-            if let id = entry.id {
-                if let stored = storedPokemon[id] {
-                    pokemon = stored
-                } else {
-                    pokemon = try? await PokeAPI.fetchPokemon(id: id)
-                    if let pokemon {
-                        print("Loaded \(pokemon.name)")
-                        modelContext.insert(pokemon)
-                    }
-                }
-            }
+            guard let id = entry.id else { return }
+            pokemon = await storage.fetchIfUncatched(id: id, stored: storedPokemon, context: modelContext)
         }
     }
 }

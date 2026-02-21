@@ -26,6 +26,8 @@ extension PokemonListEntry {
 }
 
 struct PokeAPI {
+    static let officialPokedexLimit: Int = 1025
+    
     static func fetchPokemon(id: Int) async throws -> Pokemon {
         let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(id)/")!
         let (data, _) = try await URLSession.shared.data(from: url)
@@ -36,7 +38,7 @@ struct PokeAPI {
     }
     
     static func fetchList() async throws -> PokemonListResponse {
-        let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=100000")!
+        let url = URL(string: "https://pokeapi.co/api/v2/pokemon-species?limit=\(officialPokedexLimit)")!
         let (data, _) = try await URLSession.shared.data(from: url)
         return try JSONDecoder().decode(PokemonListResponse.self, from: data)
     }

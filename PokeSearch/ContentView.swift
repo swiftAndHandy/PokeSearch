@@ -5,10 +5,13 @@
 //  Created by Andre Veltens on 15.11.25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-    @State var pokeData: [Pokemon] = [Pokemon]()
+    @Query(sort: \Pokemon.id) var pokeData: [Pokemon]
+    @Environment(\.modelContext) private var modelContext
+    
     @State var selectedPokemon: Pokemon?
     
     @State private var searchFor: String = ""
@@ -19,40 +22,18 @@ struct ContentView: View {
                 VStack {
                     ForEach(pokeData, id: \.self) { pokemon in
                         Button("Show Details for \(pokemon.name.capitalized)") {
-                            selectedPokemon = pokeData[pokemon.id - 1]
+                            selectedPokemon = pokemon
                         }
                     }
                     Text("loading done")
                 }
                 .padding()
                 .task {
-                    do {
-                        var result = try await PokeAPI.fetchPokemon(id: 1)
-                        pokeData.append(result)
-                        result = try await PokeAPI.fetchPokemon(id: 2)
-                        pokeData.append(result)
-                        result = try await PokeAPI.fetchPokemon(id: 3)
-                        pokeData.append(result)
-                        result = try await PokeAPI.fetchPokemon(id: 4)
-                        pokeData.append(result)
-                        result = try await PokeAPI.fetchPokemon(id: 5)
-                        pokeData.append(result)
-                        result = try await PokeAPI.fetchPokemon(id: 6)
-                        pokeData.append(result)
-                        result = try await PokeAPI.fetchPokemon(id: 7)
-                        pokeData.append(result)
-                        result = try await PokeAPI.fetchPokemon(id: 8)
-                        pokeData.append(result)
-                        result = try await PokeAPI.fetchPokemon(id: 9)
-                        pokeData.append(result)
-                    } catch {
-                        print(error.localizedDescription)
-                    }
+                    await fetchMissing()
                 }
             }
             .sheet(item: $selectedPokemon) { pokemon in
                 PokemonDetailView(pokemon: pokemon)
-                    
             }
             .scrollBounceBehavior(.basedOnSize)
             .toolbar {
@@ -68,6 +49,24 @@ struct ContentView: View {
                             }
                             )
             }
+        }
+    }
+    
+    private func fetchMissing() async {
+        do {
+            let storedIds = Set(pokeData.map { $0.id })
+            let list = try await PokeAPI.fetchList()
+            let missingIDs = list.results.compactMap { $0.id }.filter {
+                !storedIds.contains($0)
+            }
+            
+            for id in missingIDs {
+                let pokemon = try await PokeAPI.fetchPokemon(id: id)
+                modelContext.insert(pokemon)
+                print("downloaded \(pokemon.name)")
+            }
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }

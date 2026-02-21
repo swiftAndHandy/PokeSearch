@@ -7,6 +7,20 @@
 
 import Foundation
 
+struct PokemonListEntry: Codable {
+    let name: String
+    let url: String
+    
+    var id: Int? {
+        Int(url.split(separator: "/").last ?? "")
+    }
+}
+
+struct PokemonListResponse: Codable {
+    let count: Int
+    let results: [PokemonListEntry]
+}
+
 struct PokeAPI {
     static func fetchPokemon(id: Int) async throws -> Pokemon {
         let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(id)/")!
@@ -15,5 +29,11 @@ struct PokeAPI {
         let decoder = JSONDecoder()
         
         return try decoder.decode(Pokemon.self, from: data)
+    }
+    
+    static func fetchList() async throws -> PokemonListResponse {
+        let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=100000")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        return try JSONDecoder().decode(PokemonListResponse.self, from: data)
     }
 }

@@ -30,7 +30,6 @@ struct PokemonDetailView: View {
                         image
                             .resizable()
                             .frame(width: 250, height: 250)
-                            .scaledToFit()
                     } else if phase.error != nil {
                         Text("Error while loading image.")
                     } else {
@@ -43,11 +42,23 @@ struct PokemonDetailView: View {
             }
             .frame(maxWidth: .infinity)
             .background(.gray.opacity(0.2))
-            
-            
+            .overlay(alignment: .topTrailing) {
+                Button {
+                    Pokemon.playCry(for: pokemon)
+                } label: {
+                    Image(systemName: "speaker.wave.2")
+                        .resizable()
+                        .foregroundStyle(.blue)
+                        .frame(width: 25, height: 25)
+                        .padding(8)
+                        .background(Circle().foregroundStyle(.black.opacity(0.1)))
+                }
+                .accessibilityLabel("Play Cry")
+                .padding()
+                .padding(.trailing, 8)
+            }
             
             Spacer()
-            
             ForEach(pokemon.stats, id: \.self) { stat in
                 Text("\(stat.name): \(stat.baseStat)")
             }

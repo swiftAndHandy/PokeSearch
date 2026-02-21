@@ -14,13 +14,6 @@ struct PokemonDetailView: View {
         VStack {
             HStack(alignment: .center) {
                 Text("\(pokemon.name.capitalized)")
-                Button {
-                    Pokemon.playCry(for: pokemon)
-                } label: {
-                    Image(systemName: "speaker.wave.2")
-                        .tint(.gray)
-                }
-                .accessibilityLabel("Play Cry")
                 Spacer()
                 Text("# \(pokemon.id)")
             }
@@ -28,29 +21,30 @@ struct PokemonDetailView: View {
             .background(Color.green.opacity(0.2))
             .clipShape(.capsule)
             .font(.title)
-          
-            VStack {
-                HStack {
-                    AsyncImage(url: URL(string: pokemon.sprites.frontDefault ?? "https://invalid-url")) { phase in
-                        
-                        if let image = phase.image {
-                            image
-                                .resizable()
-                                .frame(width: 250, height: 250)
-                                .scaledToFit()
-                        } else if phase.error != nil {
-                            Text("Error while loading image.")
-                        } else {
-                            LoadingSpinner()
-                                .frame(width: 250, height: 250)
-                        }
-                    }
-                    ElementView(for: pokemon.elementTypes)
+            
+            
+            HStack {
+                AsyncImage(url: URL(string: pokemon.sprites.frontDefault ?? "https://invalid-url")) { phase in
                     
+                    if let image = phase.image {
+                        image
+                            .resizable()
+                            .frame(width: 250, height: 250)
+                            .scaledToFit()
+                    } else if phase.error != nil {
+                        Text("Error while loading image.")
+                    } else {
+                        LoadingSpinner()
+                            .frame(width: 250, height: 250)
+                    }
                 }
-                .frame(maxWidth: .infinity)
-                .background(.gray.opacity(0.2))
+                ElementView(for: pokemon.elementTypes)
+                
             }
+            .frame(maxWidth: .infinity)
+            .background(.gray.opacity(0.2))
+            
+            
             
             Spacer()
             
@@ -58,7 +52,7 @@ struct PokemonDetailView: View {
                 Text("\(stat.name): \(stat.baseStat)")
             }
         }
-
+        
     }
 }
 

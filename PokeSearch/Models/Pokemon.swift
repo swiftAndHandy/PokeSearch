@@ -84,11 +84,14 @@ class Pokemon: Codable {
         ]
     )
     
-    static func playCry(for pokemon: Pokemon) {
-        guard let url = pokemon.cries.latest else {
+    static func playCry(for pokemon: Pokemon, type: Cries.CodingKeys = .latest) {
+        let urlString = type == .latest ? pokemon.cries.latest : pokemon.cries.legacy
+        
+        guard let urlString, let url = URL(string: urlString) else {
             print("No cry available")
             return
         }
+        
         OGGPlayer.playURL(url)
     }
 }

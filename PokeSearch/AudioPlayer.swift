@@ -11,12 +11,7 @@ import AVFoundation
 struct OGGPlayer {
     private static var audioPlayer: AVAudioPlayer?
     
-    static func playURL(_ urlString: String) {
-        guard let url = URL(string: urlString) else {
-            print("Invalid URL: \(urlString)")
-            return
-        }
-        
+    static func playURL(_ url: URL) {
         Task {
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)

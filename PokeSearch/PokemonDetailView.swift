@@ -41,21 +41,11 @@ struct PokemonDetailView: View {
                 
             }
             .frame(maxWidth: .infinity)
+            .padding(.top, 40)
             .background(.gray.opacity(0.2))
             .overlay(alignment: .topTrailing) {
-                Button {
-                    Pokemon.playCry(for: pokemon)
-                } label: {
-                    Image(systemName: "speaker.wave.2")
-                        .resizable()
-                        .foregroundStyle(.blue)
-                        .frame(width: 25, height: 25)
-                        .padding(8)
-                        .background(Circle().foregroundStyle(.black.opacity(0.1)))
-                }
-                .accessibilityLabel("Play Cry")
-                .padding()
-                .padding(.trailing, 8)
+                PokemonCryButtons(pokemon: pokemon)
+                    .padding()
             }
             
             Spacer()

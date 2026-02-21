@@ -21,6 +21,10 @@ struct PokemonListResponse: Codable {
     let results: [PokemonListEntry]
 }
 
+extension PokemonListEntry {
+    static let example = PokemonListEntry(name: "bulbasaur", url: "https://pokeapi.co/api/v2/pokemon/1/")
+}
+
 struct PokeAPI {
     static func fetchPokemon(id: Int) async throws -> Pokemon {
         let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(id)/")!

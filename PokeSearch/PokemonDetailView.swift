@@ -49,7 +49,7 @@ struct PokemonDetailView: View {
             }
             
             Spacer()
-            ForEach(pokemon.stats, id: \.self) { stat in
+            ForEach(pokemon.stats, id: \.name) { stat in
                 Text("\(stat.name): \(stat.baseStat)")
             }
         }

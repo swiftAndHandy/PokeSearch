@@ -8,13 +8,28 @@
 import SwiftUI
 
 struct PokemonListView: View {
-    
+    let entries: [PokemonListEntry]
+    let storedPokemon: [Int: Pokemon]
+    var onSelect: (Pokemon) -> Void
     
     var body: some View {
-        
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
+                ForEach(entries, id: \.name) { entry in
+                    PokemonCardView(entry: entry, storedPokemon: storedPokemon, onSelect: onSelect)
+                }
+            }
+            .padding()
+        }
+        .scrollBounceBehavior(.basedOnSize)
     }
 }
 
 #Preview {
-    PokemonListView()
+    PokemonListView(
+        entries: [.example],
+        storedPokemon: [1: .example]
+    ) {
+        _ in 
+    }
 }

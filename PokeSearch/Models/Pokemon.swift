@@ -63,6 +63,19 @@ class Pokemon: Codable {
         try container.encode(elementTypes, forKey: .types)
     }
     
+    static func playCry(for pokemon: Pokemon, type: Cries.CodingKeys = .latest) {
+        let urlString = type == .latest ? pokemon.cries.latest : pokemon.cries.legacy
+        
+        guard let urlString, let url = URL(string: urlString) else {
+            print("No cry available")
+            return
+        }
+        
+        OGGPlayer.playURL(url)
+    }
+}
+
+extension Pokemon {
     static let example = Pokemon(
         abilities: [],
         baseExperience: 12,
@@ -83,15 +96,4 @@ class Pokemon: Codable {
             Element(slot: 1, name: "grass", url: "https://pokeapi.co/api/v2/type/12/"), Element(slot: 2, name: "poison", url: "")
         ]
     )
-    
-    static func playCry(for pokemon: Pokemon, type: Cries.CodingKeys = .latest) {
-        let urlString = type == .latest ? pokemon.cries.latest : pokemon.cries.legacy
-        
-        guard let urlString, let url = URL(string: urlString) else {
-            print("No cry available")
-            return
-        }
-        
-        OGGPlayer.playURL(url)
-    }
 }

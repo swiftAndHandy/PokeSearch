@@ -85,7 +85,10 @@ class Pokemon: Codable {
     )
     
     static func playCry(for pokemon: Pokemon) {
-        let url = pokemon.cries.latest
-        print(url ?? "No cry available")
+        guard let url = pokemon.cries.latest else {
+            print("No cry available")
+            return
+        }
+        OGGPlayer.playURL(url)
     }
 }

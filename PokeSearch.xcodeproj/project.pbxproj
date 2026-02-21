@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		EE20D3E22F49F2A900A3440F /* OggDecoder in Frameworks */ = {isa = PBXBuildFile; productRef = EE20D3E12F49F2A900A3440F /* OggDecoder */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		EE488AA92EC89D4E00800D3B /* PokeSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokeSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE20D3E22F49F2A900A3440F /* OggDecoder in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = PokeSearch;
 			packageProductDependencies = (
+				EE20D3E12F49F2A900A3440F /* OggDecoder */,
 			);
 			productName = PokeSearch;
 			productReference = EE488AA92EC89D4E00800D3B /* PokeSearch.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = EE488AA02EC89D4E00800D3B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				EE20D3E02F49F2A900A3440F /* XCRemoteSwiftPackageReference "OggDecoder" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EE488AAA2EC89D4E00800D3B /* Products */;
 			projectDirPath = "";
@@ -334,6 +343,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EE20D3E02F49F2A900A3440F /* XCRemoteSwiftPackageReference "OggDecoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/arkasas/OggDecoder";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EE20D3E12F49F2A900A3440F /* OggDecoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE20D3E02F49F2A900A3440F /* XCRemoteSwiftPackageReference "OggDecoder" */;
+			productName = OggDecoder;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EE488AA12EC89D4E00800D3B /* Project object */;
 }

@@ -16,13 +16,22 @@ struct ContentView: View {
     @State private var selectedPokemon: Pokemon?
     @State private var searchFor: String = ""
     
+    var filteredPokemonEntries: [PokemonListEntry] {
+        if searchFor.isEmpty {
+            return pokemonList
+        }
+        return pokemonList.filter {
+            $0.name.localizedCaseInsensitiveContains(searchFor)
+        }
+    }
+    
     var storedPokemon: [Int: Pokemon] {
         Dictionary(uniqueKeysWithValues: pokeData.map { ($0.id, $0) })
     }
     
     var body: some View {
         NavigationStack {
-            PokemonListView(entries: pokemonList, storedPokemon: storedPokemon) { pokemon in
+            PokemonListView(entries: filteredPokemonEntries, storedPokemon: storedPokemon) { pokemon in
                 selectedPokemon = pokemon
             }
             .sheet(item: $selectedPokemon) { pokemon in
@@ -30,6 +39,7 @@ struct ContentView: View {
             }
             .toolbar {
                 TextField("Search for Pokémon", text: $searchFor)
+                    .autocorrectionDisabled()
                     .padding(8)
                     .padding(.leading, 32)
                     .overlay(

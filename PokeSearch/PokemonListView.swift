@@ -14,7 +14,7 @@ struct PokemonListView: View {
     
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))]) {
                 ForEach(entries, id: \.name) { entry in
                     PokemonCardView(entry: entry, storedPokemon: storedPokemon, onSelect: onSelect)
                 }
@@ -30,6 +30,6 @@ struct PokemonListView: View {
         entries: [.example],
         storedPokemon: [1: .example]
     ) {
-        _ in 
+        _ in
     }
 }

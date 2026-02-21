@@ -32,10 +32,10 @@ struct PokemonCardView: View {
                                 Color.gray.opacity(0.2)
                             }
                         }
-                        .frame(width: 80, height: 80)
+                        .frame(width: 120, height: 120)
                         
                         Text(pokemon.name.capitalized)
-                            .font(.caption)
+                            .font(.caption.bold())
                     }
                     .padding()
                     .background(.gray.opacity(0.1))

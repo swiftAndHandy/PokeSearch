@@ -1,5 +1,5 @@
 //
-//  AudioPlayer.swift
+//  OGGPlayer.swift
 //  PokeSearch
 //
 //  Created by Andre Veltens on 21.02.26.
@@ -21,13 +21,17 @@ struct OGGPlayer {
                 let decoder = OGGDecoder()
                 
                 if let wavURL = await decoder.decode(tempURL) {
-                    audioPlayer = try? AVAudioPlayer(contentsOf: wavURL)
-                    audioPlayer?.play()
+                    do {
+                        audioPlayer = try AVAudioPlayer(contentsOf: wavURL)
+                        audioPlayer?.play()
+                    } catch {
+                        print(AppError.audioError(error).localizedDescription)
+                    }
                 } else {
-                    print("Converting OGG to WAV failed")
+                    print(AppError.audioConversionFailed.localizedDescription)
                 }
             } catch {
-                print("Error while loading: \(error.localizedDescription)")
+                print(AppError.networkError(error).localizedDescription)
             }
         }
     }

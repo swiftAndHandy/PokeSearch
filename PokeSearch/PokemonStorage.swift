@@ -10,10 +10,10 @@ import SwiftData
 @Observable
 class PokemonStorage {
     private var fetching: Set<Int> = []
+    var error: AppError?
     
     func fetchIfUncatched(id: Int, stored: [Int: Pokemon], context: ModelContext) async -> Pokemon? {
         if let stored = stored[id] {
-            print("already stored: \(stored.name)")
             return stored
         }
         
@@ -21,14 +21,14 @@ class PokemonStorage {
         fetching.insert(id)
         defer { fetching.remove(id) }
         
-        let fetched = try? await PokeAPI.fetchPokemon(id: id)
-        
-        if let fetched {
+        do {
+            let fetched = try await PokeAPI.fetchPokemon(id: id)
             context.insert(fetched)
+            return fetched
+        } catch {
+            self.error = .networkError(error)
+            return nil
         }
-        
-        print(fetched?.name ?? "not found")
-        return fetched
         
     }
 }

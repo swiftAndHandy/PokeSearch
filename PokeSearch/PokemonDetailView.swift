@@ -49,9 +49,10 @@ struct PokemonDetailView: View {
             }
             
             Spacer()
-            ForEach(pokemon.stats, id: \.name) { stat in
-                Text("\(stat.name): \(stat.baseStat)")
-            }
+//            ForEach(pokemon.stats, id: \.name) { stat in
+//                Text("\(stat.name): \(stat.baseStat)")
+//            }
+            StatRadarView(stats: pokemon.stats)
         }
         
     }

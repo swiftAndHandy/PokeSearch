@@ -13,19 +13,27 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     
     @State private var pokemonList: [PokemonListEntry] = []
-    @State private var selectedPokemon: Pokemon?
     @State private var searchFor: String = ""
+    @State private var selectedPokemon: Pokemon?
+    @State private var selectedType: String? = nil
+    @State private var pokemonListByType: [PokemonListEntry] = []
     @State private var storage = PokemonStorage()
     @State private var listLoadingError: AppError?
     @State private var networkErrorisPresent: Bool = false
     
+//    var filteredPokemonEntries: [PokemonListEntry] {
+//        if searchFor.isEmpty {
+//            return pokemonList
+//        }
+//        return pokemonList.filter {
+//            $0.name.localizedCaseInsensitiveContains(searchFor)
+//        }
+//    }
+    
     var filteredPokemonEntries: [PokemonListEntry] {
-        if searchFor.isEmpty {
-            return pokemonList
-        }
-        return pokemonList.filter {
-            $0.name.localizedCaseInsensitiveContains(searchFor)
-        }
+        let base = selectedType != nil ? pokemonListByType : pokemonList
+        if searchFor.isEmpty { return base }
+        return base.filter { $0.name.localizedCaseInsensitiveContains(searchFor) }
     }
     
     var storedPokemon: [Int: Pokemon] {
@@ -41,18 +49,30 @@ struct ContentView: View {
                 PokemonDetailView(pokemon: pokemon)
             }
             .toolbar {
-                TextField("Search for Pokémon", text: $searchFor)
-                    .autocorrectionDisabled()
-                    .padding(8)
-                    .padding(.leading, 32)
-                    .overlay(
-                        HStack {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundStyle(.gray)
-                                .padding(.leading, 8)
-                            Spacer()
-                        }
-                    )
+                ToolbarItem {
+                    TextField("Search for Pokémon", text: $searchFor)
+                        .autocorrectionDisabled()
+                        .padding(8)
+                        .padding(.leading, 32)
+                        .overlay(
+                            HStack {
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundStyle(.gray)
+                                    .padding(.leading, 8)
+                                Spacer()
+                            }
+                        )
+                }
+                
+//                ToolbarItem(placement: .topBarTrailing) {
+//                    Menu {
+//                        Picker("Type", selection: $selectedType) {
+//                            Text("All").tag(nil as String?)
+//                            ForEach(PokemonType)
+//                        }
+//                    }
+//                    
+//                }
             }
             .task {
                 if pokemonList.isEmpty {
@@ -74,6 +94,18 @@ struct ContentView: View {
                 }
             } message: {
                 Text(listLoadingError?.localizedDescription ?? "Unknown Error.")
+            }
+        }
+        .onChange(of: selectedType) { _, newType in
+            pokemonListByType = []
+            guard let newType else { return }
+            Task {
+                do {
+                    pokemonListByType = try await PokeAPI.fetchList(type: newType)
+                } catch {
+                    networkErrorisPresent = true
+                    listLoadingError = .networkError(error)
+                }
             }
         }
         .environment(storage)

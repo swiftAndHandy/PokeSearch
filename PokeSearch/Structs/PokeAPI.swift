@@ -16,6 +16,14 @@ struct PokemonListEntry: Codable {
     }
 }
 
+struct PokemonTypeEntry: Codable {
+    let pokemon: PokemonListEntry
+}
+
+struct PokemonTypeResponse: Codable {
+    let pokemon: [PokemonTypeEntry]
+}
+
 struct PokemonListResponse: Codable {
     let count: Int
     let results: [PokemonListEntry]
@@ -41,5 +49,12 @@ struct PokeAPI {
         let url = URL(string: "https://pokeapi.co/api/v2/pokemon-species?limit=\(officialPokedexLimit)")!
         let (data, _) = try await URLSession.shared.data(from: url)
         return try JSONDecoder().decode(PokemonListResponse.self, from: data)
+    }
+    
+    static func fetchList(type: String) async throws -> [PokemonListEntry] {
+        let url = URL(string: "https://pokeapi.co/api/v2/type/\(type)/")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = try JSONDecoder().decode(PokemonTypeResponse.self, from: data)
+        return response.pokemon.map { $0.pokemon }.filter { ($0.id ?? 0) <= officialPokedexLimit }
     }
 }

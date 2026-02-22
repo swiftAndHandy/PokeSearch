@@ -34,8 +34,12 @@ struct ElementModifier: ViewModifier {
         switch element {
         case .bug:
             return ElementStyle(foreground: .black, background: .green.opacity(0.7))
+        case .dark:
+            return ElementStyle(foreground: .white, background: .black.opacity(0.7))
         case .dragon:
             return ElementStyle(foreground: .black, background: .teal)
+        case .electric:
+            return ElementStyle(foreground: .black, background: .yellow.opacity(0.7))
         case .fairy:
             return ElementStyle(foreground: .white.opacity(1), background: .pink.opacity(0.75))
         case .fighting:
@@ -58,6 +62,8 @@ struct ElementModifier: ViewModifier {
             return ElementStyle(foreground: .white, background: .purple.opacity(0.7))
         case .psychic:
             return ElementStyle(foreground: .white, background: .indigo.opacity(0.9))
+        case .rock:
+            return ElementStyle(foreground: .black, background: .brown.opacity(0.8))
         case .steel:
             return ElementStyle(foreground: .white, background: .gray.opacity(0.9))
         case .water:

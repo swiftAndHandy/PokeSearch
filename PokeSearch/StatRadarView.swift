@@ -58,7 +58,7 @@ struct StatRadarView: View {
     
     private func point(index: Int, value: Double) -> CGPoint {
         let angle = (Double(index) / Double(statOrder.count)) * 2 * .pi - .pi / 2
-        let distance = (value / maxStatValue) * radius
+        let distance = min((value / maxStatValue), 1.0) * radius
         return CGPoint(
             x: center.x + cos(angle) * distance,
             y: center.y + sin(angle) * distance

@@ -10,6 +10,23 @@ import SwiftUI
 struct PokemonDetailView: View {
     let pokemon: Pokemon
     
+    @State private var showBack: Bool = false
+    @State private var showShiny: Bool = false
+    @State private var showFemale: Bool = false
+    
+    private var currentSprite: String? {
+        switch (showBack, showShiny, showFemale) {
+        case (false, false, false): return pokemon.sprites.frontDefault
+        case(false, false, true): return pokemon.sprites.frontFemale
+        case(false, true, false): return pokemon.sprites.frontShiny
+        case(false, true, true): return pokemon.sprites.frontShinyFemale
+        case(true, false, false): return pokemon.sprites.backDefault
+        case(true, false, true): return pokemon.sprites.backFemale
+        case(true, true, false): return pokemon.sprites.backShiny
+        case(true, true, true): return pokemon.sprites.backShinyFemale
+        }
+    }
+    
     var body: some View {
         VStack {
             HStack(alignment: .center) {
@@ -24,34 +41,34 @@ struct PokemonDetailView: View {
             
             
             HStack {
-                AsyncImage(url: URL(string: pokemon.sprites.frontDefault ?? "https://invalid-url")) { phase in
-                    
+                AsyncImage(url: URL(string: currentSprite ?? "https://invalid-url")) { phase in
                     if let image = phase.image {
                         image
                             .resizable()
-                            .frame(width: 250, height: 250)
                     } else if phase.error != nil {
                         Text("Error while loading image.")
                     } else {
                         LoadingSpinner()
-                            .frame(width: 250, height: 250)
                     }
                 }
+                .frame(width: 250, height: 250)
+                
                 ElementView(for: pokemon.elementTypes)
                 
             }
             .frame(maxWidth: .infinity)
             .padding(.top, 40)
             .background(.gray.opacity(0.2))
+            .overlay(alignment: .topLeading) {
+                SpriteButtons(pokemon: pokemon, showFemale: $showFemale, showShiny: $showShiny, showBack: $showBack)
+                .padding()
+            }
             .overlay(alignment: .topTrailing) {
                 PokemonCryButtons(pokemon: pokemon)
                     .padding()
             }
             
             Spacer()
-//            ForEach(pokemon.stats, id: \.name) { stat in
-//                Text("\(stat.name): \(stat.baseStat)")
-//            }
             StatRadarView(stats: pokemon.stats)
         }
         

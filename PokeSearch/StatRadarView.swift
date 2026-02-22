@@ -13,6 +13,9 @@ struct StatRadarView: View {
     private let statOrder = ["hp", "attack", "defense", "special-attack", "special-defense", "speed"]
     private let maxStatValue: Double = 180
     private let size: Double = 280
+    private let offset: Double = 80
+    
+    private var sizeWithOffset: Double { size + offset }
     
     private var radius: Double { size / 2 }
     private var center: CGPoint { CGPoint(x: radius, y: radius) }
@@ -45,12 +48,12 @@ struct StatRadarView: View {
             
             ForEach(Array(statOrder.enumerated()), id: \.offset) { index, name in
                 Text(name.uppercased())
-                    .font(.system(size: 8))
+                    .font(.system(size: 10, weight: .bold))
                     .offset(y: labelOffset(index: index))
                     .position(labelPosition(index: index))
             }
         }
-        .frame(width: size + 80, height: size + 80)
+        .frame(width: sizeWithOffset, height: sizeWithOffset)
     }
     
     private func point(index: Int, value: Double) -> CGPoint {
@@ -66,8 +69,8 @@ struct StatRadarView: View {
         let angle = (Double(index) / Double(statOrder.count)) * 2 * .pi - .pi / 2
         let labelDistance = radius + 15 //+ extraPadding
         return CGPoint(
-            x: (size + 80) / 2 + cos(angle) * labelDistance,
-            y: (size + 80) / 2 + sin(angle) * labelDistance
+            x: (sizeWithOffset) / 2 + cos(angle) * labelDistance,
+            y: (sizeWithOffset) / 2 + sin(angle) * labelDistance
         )
     }
     

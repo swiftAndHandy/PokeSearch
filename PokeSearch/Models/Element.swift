@@ -45,24 +45,24 @@ class Element: Codable {
     }
     
     enum ElementList: String, CaseIterable {
-        case bug = "bug",
-             dark = "dark",
-             dragon = "dragon",
-             electric = "electric",
-             fairy = "fairy",
-             fighting = "fighting",
-             fire = "fire",
-             flying = "flying",
-             ghost = "ghost",
-             grass = "grass",
-             ground = "ground",
-             ice = "ice",
-             normal = "normal",
-             poison = "poison",
-             psychic = "psychic",
-             rock = "rock",
-             steel = "steel",
-             water = "water",
-             unknown = "unknown"
+        case bug,
+             dark,
+             dragon,
+             electric,
+             fairy,
+             fighting,
+             fire,
+             flying,
+             ghost,
+             grass,
+             ground,
+             ice,
+             normal,
+             poison,
+             psychic,
+             rock,
+             steel,
+             water,
+             unknown
     }
 }

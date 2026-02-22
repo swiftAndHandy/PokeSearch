@@ -21,15 +21,6 @@ struct ContentView: View {
     @State private var listLoadingError: AppError?
     @State private var networkErrorisPresent: Bool = false
     
-//    var filteredPokemonEntries: [PokemonListEntry] {
-//        if searchFor.isEmpty {
-//            return pokemonList
-//        }
-//        return pokemonList.filter {
-//            $0.name.localizedCaseInsensitiveContains(searchFor)
-//        }
-//    }
-    
     var filteredPokemonEntries: [PokemonListEntry] {
         let base = selectedType != nil ? pokemonListByType : pokemonList
         if searchFor.isEmpty { return base }
@@ -64,15 +55,19 @@ struct ContentView: View {
                         )
                 }
                 
-//                ToolbarItem(placement: .topBarTrailing) {
-//                    Menu {
-//                        Picker("Type", selection: $selectedType) {
-//                            Text("All").tag(nil as String?)
-//                            ForEach(PokemonType)
-//                        }
-//                    }
-//                    
-//                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Picker("Type", selection: $selectedType) {
+                            Text("All").tag(nil as String?)
+                            ForEach(Element.ElementList.allCases, id: \.self) { type in
+                                Text(type.rawValue.capitalized).tag(type.rawValue as String?)
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "line.3.horizontal.decrease.circle")
+                    }
+                    .accessibilityLabel("Filter by type")
+                }
             }
             .task {
                 if pokemonList.isEmpty {
